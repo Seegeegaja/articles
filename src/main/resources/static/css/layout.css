@@ -1,0 +1,21 @@
+html{
+    position : relative;
+    min-height:100%;
+    margin : 0px;
+}
+body{
+    min-height: 100%;
+}
+.footer{
+position: absolute;
+left: 0px;
+right:0px;
+bottom : 0;
+width: 100%;
+padding : 15px 0;
+text-align: center;
+}
+
+.content{
+    margin: 50px 200px 100px 200px;
+}
