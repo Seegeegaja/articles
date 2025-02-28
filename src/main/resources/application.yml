@@ -1,4 +1,4 @@
-#MySQL \uC14B\uD305
+#MySQL 설정
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -7,14 +7,14 @@ spring:
     password: ${DB_PW}
   sql:
     init:
-      mode: always
-    # \uC885\uB958 3\uAC00\uC9C0
-    # always \uB9E4\uBC88 , embedded : \uB0B4\uC7A5DB\uB9CC never : \uBAA8\uB4E0 \uB3D9\uC791 \uC548\uD568
+      mode: never
+    # 정렬 방식
+    # always 항상 , embedded : 그장 DB만 never : 모든 동작 안함
   jpa:
-    # spring.sql.init \uCD08\uAE30\uC791\uC5C5 \uD560\uB54C \uB370\uC774\uD130 \uC0DD\uC131\uC744 \uC5B8\uC81C \uD560\uAEBC\uB0D0
+    # spring.sql.init 초기화 할때 데이터 입력을 위한 리 작업을 배치 할것
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: true
