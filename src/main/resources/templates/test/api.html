@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/js/jquery.js}"></script>
+</head>
+<body>
+userid : <input type="text" id="userid"><br>
+password : <input type="text" id="password">
+<br>
+<button id="btnApi"> send</button>
+<br>
+<button id="btnResponse">Response</button>
+<br>
+<button id="btnArray">Array</button>
+<br>
+<button id="btnDelete">Delete</button>
+<br>
+<script>
+    $(document).ready(function(){
+      $("#btnApi").on("click",function(){
+        event.preventDefault();
+        if($("#userid").val()==""){
+            $("#userid").focus();
+            return;
+        }
+        if($("#password").val()==""){
+            $("#password").focus();
+            return;
+        }
+<!--        //아이디와 패스워드 입력후 전송하면 서버에 출력-->
+        $.ajax({
+<!--            요청할 주소를 처리 -->
+<!--            localhost:8080/apiPostTest-->
+            url : 'apiPostTest',
+<!--            전송-->
+            type : 'post',
+            datatype : 'test',
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            data : JSON.stringify({
+                'userid' : $("#userid").val(),
+                'password' : $("#password").val()
+            }),
+            success : function(data , status , xhr){
+                console.log(data)
+            },
+            error : function(xhr , status , error){
+                console.log(error)
+            }
+        })
+        })
+    })
+      $("#btnResponse").on("click",function(){
+        $.ajax({
+            url : 'getResponse',
+            type : 'post',
+            datatype : 'json',
+            data : '',
+            success : function(data , status , xhr){
+            console.log(data)
+            },
+            error : function(xhr , status , error){
+            console.log(error)
+            }
+        })
+      })
+
+       $("#btnArray").on("click",function(){
+       let jang = {
+            'userid' : $("#userid").val(),
+            'password' : $('#password').val(),
+        }
+        let jin = {
+            'userid' : '안유진',
+            'password' : '1234',
+        }
+         $.ajax({
+            url : 'apiPostArrayTest',
+            type : 'post',
+            datatype : 'json',
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            data : JSON.stringify([jang , jin]),
+            success : function(data , status , xhr){
+            console.log(data)
+            },
+            error : function(xhr , status , error){
+            console.log(error)
+            }
+        })
+       })
+       $("#btnDelete").on("click",function(){
+         $.ajax({
+            url : 'apiTest',
+            type : 'patch',
+            datatype : 'json',
+            data : '',
+            success : function(data , status , xhr){
+            console.log(data)
+            },
+            error : function(xhr , status , error){
+            console.log(error)
+            }
+        })
+     })
+</script>
+</body>
+</html>
