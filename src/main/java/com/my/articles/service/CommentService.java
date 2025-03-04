@@ -28,7 +28,7 @@ public class CommentService {
     public Map<String, Object> findByCommentId(Long commentId) {
         Comment comment = dao.findByCommentId(commentId);
         Map<String, Object> data = new HashMap<>();
-        if (ObjectUtils.isEmpty(commentId)) {
+        if (ObjectUtils.isEmpty(comment)) {
             data.put("articleId", null);
             data.put("dto", null);
         } else {
