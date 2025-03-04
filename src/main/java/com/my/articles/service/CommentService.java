@@ -1,12 +1,15 @@
 package com.my.articles.service;
 
 import com.my.articles.dao.CommentDAO;
+import com.my.articles.dto.ArticleDTO;
 import com.my.articles.dto.CommentDTO;
+import com.my.articles.entity.Article;
 import com.my.articles.entity.Comment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -40,5 +43,10 @@ public class CommentService {
 
     public void updateComment(CommentDTO dto) {
         dao.updateComment(CommentDTO.fromDto(dto));
+    }
+
+    public List<CommentDTO> findByArticleComments(Long articleId) {
+        List<Comment> list = dao.findByArticleComments(articleId);
+        return list.stream().map(CommentDTO::fromEntity).toList();
     }
 }

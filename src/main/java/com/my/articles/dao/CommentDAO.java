@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Transactional
 public class CommentDAO {
@@ -39,5 +41,13 @@ public class CommentDAO {
         original.setNickname(comment.getNickname());
         original.setBody(comment.getBody());
 
+    }
+
+    public List<Comment> findByArticleComments(Long articleId) {
+        String sql = "SELECT c FROM Comment c WHERE c.article.id =  :articleId "+
+                "ORDER BY c.article.id ASC";
+        List<Comment> comments = em.createQuery(sql, Comment.class)
+                .setParameter("articleId", articleId).getResultList();
+        return comments;
     }
 }
