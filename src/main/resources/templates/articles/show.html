@@ -35,7 +35,10 @@
           <div class="card-header">
               <span th:text="*{nickname}">Featured</span>
               <a th:href="@{|/articles/comments/view/${comment.commentId}|}" class="btn btn-sm btn-outline-primary" id="comment-update-btn">수정</a>
-              <a th:href="@{|/articles/comments/${comment.commentId}|}" class="btn btn-sm btn-outline-primary" id="comment-delete-btn" >삭제</a>
+<!--              <a th:href="@{|/articles/comments/${comment.commentId}|}" class="btn btn-sm btn-outline-primary" id="comment-delete-btn" >삭제</a>-->
+              <a class="btn btn-sm btn-outline-primary"
+                 id="comment-delete-btn" >삭제</a>
+              <input type="hidden" th:value="${comment.commentId}">
           </div>
           <div class="card-body">
               <p class="card-text" th:text="*{body}">With supporting text below as a natural lead-in to additional content.</p>
@@ -53,8 +56,64 @@
               <textarea type="text" class="form-control" rows="3" id="new-comment-body" name="body"></textarea>
           </div>
           <!-- 전송버튼-->
-          <button type="submit" class="btn btn-primary" id="comment-create-btn">댓글 작성</button>
+<!--          <button type="submit" class="btn btn-primary" id="comment-create-btn">댓글 작성</button>-->
+          <button type="button" class="btn btn-primary" id="comment-create-btn">댓글 작성</button>
       </form>
+      <script th:inline="javascript">
+          $(document).ready(function(){
+          //댓글삭제
+            $(document).on("click" , "#comment-delete-btn" , function(){
+             let commentId = $(this).next().val();
+             let sendUrl = "/api/comments/"+commentId;
+             $.ajax({
+                url : sendUrl,
+                type : "DELETE",
+                success : function(data , status, xhr){
+                alert(data.message);
+                location.href = `/articles/[[${dto.id}]]`
+                },
+                error : function(xhr , status , error){
+                alert("댓글 처리중 오류")
+                },
+             })
+
+            })
+            //댓글 입력
+            $("#comment-create-btn").on("click" ,function(event){
+                event.preventDefault();
+                if($("#new-comment-nickname").val()==""){
+                    alert("nickname 을 입력하세요").focus();
+                    return;
+                }
+                if($("#new-comment-body").val()==""){
+                    alert("댓글 내용을 입력하세요").focus();
+                    return;
+                }
+                 let sendUrl = `/api/articles/[[${dto.id}]]/comments`;
+                 let newComment = {
+                     "nickname" : $("#new-comment-nickname").val()
+                     , "body" : $("#new-comment-body").val()
+                    }
+                 $.ajax({
+                    url : sendUrl,
+                    type : "post",
+                    dataType : "json" ,
+                    data : JSON.stringify(newComment),
+                    headers : {
+                        "Content-Type" : "application/json",
+                    },
+                    success : function(data , status, xhr){
+                    alert(data.message);
+                   location.href = `/articles/[[${dto.id}]]`
+                   },
+                   error : function(xhr , status , error){
+                    alert("댓글 처리중 오류")
+                   },
+                   })
+            })
+          })
+      </script>
+
   </div>
 </body>
 </html>
