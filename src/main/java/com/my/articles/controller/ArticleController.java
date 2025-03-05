@@ -2,7 +2,12 @@ package com.my.articles.controller;
 
 import com.my.articles.dto.ArticleDTO;
 import com.my.articles.service.ArticleService;
+import com.my.articles.service.PaginationService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +22,34 @@ import java.util.List;
 @Slf4j
 public class ArticleController {
     private final ArticleService articleService;
+    private final PaginationService paginationService;
 
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(ArticleService articleService, PaginationService paginationService) {
         this.articleService = articleService;
+        this.paginationService = paginationService;
     }
 
     @GetMapping({"", "/"})
-    public String showAllArticles(Model model) {
-        List<ArticleDTO> articles = articleService.getAllArticles();
+    public String showAllArticles(Model model ,
+                                  @PageableDefault(page = 0, size = 5,sort = "id" , direction = Sort.Direction.DESC) Pageable pageable) {
+//        List<ArticleDTO> articles = articleService.getAllArticles();
+//        model.addAttribute("articles", articles);
+//        Paging 처리
+        Page<ArticleDTO> articles = articleService.getArticlePage(pageable);
+
+        //paging정보 확인하기
+        //전체 페이지 수
+        int totalPage = articles.getTotalPages();
+        //현제 페이지 수
+        int currentPage = articles.getNumber();
+
+        System.out.println("totalPage = "+totalPage);
+        System.out.println("currentPage = "+currentPage);
+        //페이지 블럭을 생성
+        List<Integer> barNumbers = paginationService.getPaginationBarNumber(currentPage, totalPage);
+        System.out.println("barNumbers = " +barNumbers);
+
+        model.addAttribute("pagebars", barNumbers);
         model.addAttribute("articles", articles);
         return "articles/show_all";
     }
