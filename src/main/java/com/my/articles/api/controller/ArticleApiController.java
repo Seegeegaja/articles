@@ -3,7 +3,6 @@ package com.my.articles.api.controller;
 import com.my.articles.api.exception.BadRequestException;
 import com.my.articles.dto.ArticleDTO;
 import com.my.articles.dto.CommentDTO;
-import com.my.articles.dto.OnlyArticles;
 import com.my.articles.service.ArticleService;
 import com.my.articles.service.CommentService;
 import org.springframework.http.HttpStatus;
